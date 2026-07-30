@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import { formatPrice } from '$lib/format';
+	import ProductCard from '$lib/components/ProductCard.svelte';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import type { PageProps } from './$types';
 
@@ -26,8 +26,8 @@
 		maxPrice = data.filters.max_price ?? '';
 	});
 
-	function applyFilters(e: SubmitEvent) {
-		e.preventDefault();
+	function applyFilters(e?: SubmitEvent) {
+		e?.preventDefault();
 		const params = new SvelteURLSearchParams();
 		if (q) params.set('q', q);
 		if (displayCategory) params.set('display_category', displayCategory);
@@ -37,98 +37,164 @@
 		goto(resolve(`/?${params.toString()}`));
 	}
 
+	function clearFilters() {
+		displayCategory = '';
+		brand = '';
+		minPrice = '';
+		maxPrice = '';
+		applyFilters();
+	}
+
 	function goToPage(pageNumber: number) {
 		const params = new SvelteURLSearchParams(page.url.searchParams);
 		params.set('page', String(pageNumber));
 		goto(resolve(`/?${params.toString()}`));
 	}
+
+	let hasActiveFilters = $derived(!!(displayCategory || brand || minPrice || maxPrice));
 </script>
 
 <svelte:head>
 	<title>Mr. Twin — Katalog</title>
 </svelte:head>
 
-<div class="mx-auto max-w-6xl px-4 py-8">
-	<h1 class="mb-6 text-2xl font-bold text-gray-900">Katalog Produk</h1>
-
-	<form
-		onsubmit={applyFilters}
-		class="mb-8 grid grid-cols-2 gap-3 rounded-lg bg-gray-50 p-4 sm:grid-cols-3 md:grid-cols-5"
-	>
-		<input
-			type="text"
-			placeholder="Cari produk..."
-			bind:value={q}
-			class="col-span-2 rounded border border-gray-300 px-3 py-2 text-sm sm:col-span-1 md:col-span-2"
-		/>
-		<select bind:value={displayCategory} class="rounded border border-gray-300 px-3 py-2 text-sm">
-			<option value="">Semua Kategori</option>
-			{#each data.categories as category (category)}
-				<option value={category}>{category}</option>
-			{/each}
-		</select>
-		<input
-			type="text"
-			placeholder="Brand"
-			bind:value={brand}
-			class="rounded border border-gray-300 px-3 py-2 text-sm"
-		/>
-		<input
-			type="number"
-			placeholder="Harga min"
-			bind:value={minPrice}
-			class="rounded border border-gray-300 px-3 py-2 text-sm"
-		/>
-		<input
-			type="number"
-			placeholder="Harga max"
-			bind:value={maxPrice}
-			class="rounded border border-gray-300 px-3 py-2 text-sm"
-		/>
-		<button
-			type="submit"
-			class="col-span-2 rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 sm:col-span-1 md:col-span-5"
-		>
-			Terapkan Filter
-		</button>
-	</form>
-
-	{#if data.products.data.length === 0}
-		<p class="text-gray-500">Tidak ada produk ditemukan.</p>
-	{:else}
-		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-			{#each data.products.data as product (product.id)}
-				<a
-					href={resolve('/products/[id]', { id: String(product.id) })}
-					class="flex flex-col rounded-lg border border-gray-200 p-4 transition hover:shadow-md"
-				>
-					<span class="mb-1 text-xs text-gray-400">{product.display_category ?? '—'}</span>
-					<span class="mb-2 line-clamp-2 flex-1 text-sm font-medium text-gray-900"
-						>{product.name}</span
-					>
-					<span class="mb-1 text-base font-semibold text-gray-900"
-						>{formatPrice(product.price)}</span
-					>
-					<span class="text-xs {product.stock > 0 ? 'text-green-600' : 'text-red-500'}">
-						{product.stock > 0 ? `Stok: ${product.stock}` : 'Stok habis'}
-					</span>
-				</a>
-			{/each}
+<div class="mx-auto max-w-6xl px-4 py-6">
+	<div class="mb-6 flex items-center justify-between">
+		<div>
+			<h1 class="text-2xl font-bold tracking-tight text-zinc-900">Katalog Produk</h1>
+			<p class="text-sm text-zinc-500">{data.products.meta.total} produk tersedia</p>
 		</div>
+	</div>
 
-		{#if data.products.meta.last_page > 1}
-			<div class="mt-8 flex items-center justify-center gap-2">
-				{#each Array(data.products.meta.last_page) as _, i (i)}
-					<button
-						onclick={() => goToPage(i + 1)}
-						class="rounded px-3 py-1 text-sm {data.products.meta.current_page === i + 1
-							? 'bg-gray-900 text-white'
-							: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+	<div class="flex flex-col gap-6 lg:flex-row">
+		<aside class="shrink-0 lg:w-56">
+			<form onsubmit={applyFilters} class="space-y-5">
+				<div class="sm:hidden">
+					<label
+						class="mb-1 block text-xs font-semibold tracking-wide text-zinc-500 uppercase"
+						for="q-mobile"
 					>
-						{i + 1}
+						Cari
+					</label>
+					<input
+						id="q-mobile"
+						type="text"
+						placeholder="Cari produk..."
+						bind:value={q}
+						class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm"
+					/>
+				</div>
+
+				<div>
+					<span class="mb-2 block text-xs font-semibold tracking-wide text-zinc-500 uppercase"
+						>Kategori</span
+					>
+					<div class="space-y-1.5">
+						<label class="flex items-center gap-2 text-sm text-zinc-700">
+							<input type="radio" bind:group={displayCategory} value="" class="accent-blue-600" />
+							Semua Kategori
+						</label>
+						{#each data.categories as category (category)}
+							<label class="flex items-center gap-2 text-sm text-zinc-700">
+								<input
+									type="radio"
+									bind:group={displayCategory}
+									value={category}
+									class="accent-blue-600"
+								/>
+								{category}
+							</label>
+						{/each}
+					</div>
+				</div>
+
+				<div>
+					<label
+						class="mb-2 block text-xs font-semibold tracking-wide text-zinc-500 uppercase"
+						for="brand"
+					>
+						Brand
+					</label>
+					<input
+						id="brand"
+						type="text"
+						placeholder="Semua brand"
+						bind:value={brand}
+						class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm"
+					/>
+				</div>
+
+				<div>
+					<span class="mb-2 block text-xs font-semibold tracking-wide text-zinc-500 uppercase"
+						>Harga</span
+					>
+					<div class="flex items-center gap-2">
+						<input
+							type="number"
+							placeholder="Min"
+							bind:value={minPrice}
+							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm"
+						/>
+						<span class="text-zinc-300">–</span>
+						<input
+							type="number"
+							placeholder="Max"
+							bind:value={maxPrice}
+							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm"
+						/>
+					</div>
+				</div>
+
+				<div class="flex flex-col gap-2">
+					<button
+						type="submit"
+						class="w-full rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700"
+					>
+						Terapkan
 					</button>
-				{/each}
-			</div>
-		{/if}
-	{/if}
+					{#if hasActiveFilters}
+						<button
+							type="button"
+							onclick={clearFilters}
+							class="w-full rounded-md px-4 py-2 text-sm font-medium text-zinc-500 hover:bg-zinc-100"
+						>
+							Reset Filter
+						</button>
+					{/if}
+				</div>
+			</form>
+		</aside>
+
+		<div class="min-w-0 flex-1">
+			{#if data.products.data.length === 0}
+				<div
+					class="flex flex-col items-center gap-2 rounded-xl border border-dashed border-zinc-200 py-16 text-center"
+				>
+					<p class="font-medium text-zinc-600">Tidak ada produk ditemukan</p>
+					<p class="text-sm text-zinc-400">Coba ubah atau reset filter yang sedang aktif.</p>
+				</div>
+			{:else}
+				<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+					{#each data.products.data as product (product.id)}
+						<ProductCard {product} />
+					{/each}
+				</div>
+
+				{#if data.products.meta.last_page > 1}
+					<div class="mt-8 flex items-center justify-center gap-1">
+						{#each Array.from({ length: data.products.meta.last_page }, (_, i) => i + 1) as pageNumber (pageNumber)}
+							<button
+								onclick={() => goToPage(pageNumber)}
+								class="h-8 w-8 rounded-md text-sm {data.products.meta.current_page === pageNumber
+									? 'bg-zinc-900 text-white'
+									: 'text-zinc-600 hover:bg-zinc-100'}"
+							>
+								{pageNumber}
+							</button>
+						{/each}
+					</div>
+				{/if}
+			{/if}
+		</div>
+	</div>
 </div>

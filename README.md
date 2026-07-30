@@ -18,9 +18,11 @@ cp .env.example .env
 ```
 
 `.env`:
+
 ```
 PUBLIC_API_BASE_URL=http://localhost:8000
 ```
+
 Point this at wherever `mr-twin-backend` is running (`php artisan serve` default is `http://localhost:8000`).
 
 ```bash
@@ -31,16 +33,24 @@ The backend needs at least one product published (`product_display.is_published 
 
 ## Pages
 
-| Route | Auth | Notes |
-|---|---|---|
-| `/` | — | Katalog (SSR), filter by category/brand/price/search via URL query params |
-| `/products/[id]` | — | Detail produk, add to cart (disabled if out of stock) |
-| `/cart` | — | Cart review (client-only, localStorage) |
-| `/checkout` | customer | Shipping form + order summary; redirects to `/login` if not authed |
-| `/login`, `/register` | — | Customer auth, issues a Sanctum token stored in `localStorage` |
+| Route                     | Auth     | Notes                                                                      |
+| ------------------------- | -------- | -------------------------------------------------------------------------- |
+| `/`                       | —        | Katalog (SSR), filter by category/brand/price/search via URL query params  |
+| `/products/[id]`          | —        | Detail produk, add to cart (disabled if out of stock)                      |
+| `/cart`                   | —        | Cart review (client-only, localStorage)                                    |
+| `/checkout`               | customer | Shipping form + order summary; redirects to `/login` if not authed         |
+| `/login`, `/register`     | —        | Customer auth, issues a Sanctum token stored in `localStorage`             |
 | `/orders`, `/orders/[id]` | customer | Order history — `/orders/[id]` is also where checkout redirects on success |
 
 Pages that depend on `localStorage` (cart/auth token) disable SSR (`export const ssr = false`) to avoid a server/client hydration mismatch; the katalog and product-detail pages stay server-rendered since their data is public.
+
+## UI components (`src/lib/components/`)
+
+- `ProductImage.svelte` — renders `product.images[0]`, falling back to a placeholder icon when there's no image (also falls back on a broken image URL via `onerror`). Every product currently synced from Accurate has no image (that's a curation-time upload, not something Accurate provides), so this fallback is what most of the catalog actually looks like today.
+- `ProductCard.svelte` — the katalog grid card, reused wherever a product needs a compact preview.
+- `ToastStack.svelte` / `stores/toast.svelte.ts` — a small global toast queue (e.g. "added to cart") instead of mutating button text in place.
+
+Design direction: neutral zinc palette, a single blue accent for primary actions, sidebar filters on the katalog page (not a top filter bar), and a thin top progress bar during navigation (driven by `navigating` from `$app/state`) — aimed at reading as an actual storefront rather than a generic component-library demo.
 
 ## State (`src/lib/stores/`)
 

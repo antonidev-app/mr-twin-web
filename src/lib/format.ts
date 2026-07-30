@@ -5,3 +5,13 @@ export function formatPrice(value: number): string {
 		maximumFractionDigits: 0
 	}).format(value);
 }
+
+const STATUS_STYLES: Record<string, string> = {
+	pending: 'bg-amber-50 text-amber-700',
+	completed: 'bg-green-50 text-green-700',
+	cancelled: 'bg-red-50 text-red-600'
+};
+
+export function orderStatusClass(status: string): string {
+	return STATUS_STYLES[status] ?? 'bg-zinc-100 text-zinc-600';
+}
