@@ -90,7 +90,7 @@
 			</div>
 
 			{#if data.product.description}
-				<p class="mb-6 max-w-[60ch] text-sm leading-relaxed text-zinc-600">
+				<p class="mb-6 max-w-[60ch] text-sm leading-relaxed whitespace-pre-line text-zinc-600">
 					{data.product.description}
 				</p>
 			{/if}
