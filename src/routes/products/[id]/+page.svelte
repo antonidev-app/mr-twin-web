@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import type { PathnameWithSearchOrHash } from '$app/types';
+	import { getRelatedProducts } from '$lib/api/catalog';
+	import type { Product } from '$lib/api/types';
+	import ProductCard from '$lib/components/ProductCard.svelte';
 	import ProductImage from '$lib/components/ProductImage.svelte';
 	import { formatPrice } from '$lib/format';
 	import { toast } from '$lib/stores/toast.svelte';
@@ -12,6 +15,28 @@
 	let quantity = $state(1);
 
 	let justAdded = $state(false);
+
+	let related = $state<Product[]>([]);
+	let relatedLoading = $state(true);
+
+	// Keyed on product id (not onMount) — SvelteKit reuses this component
+	// instance when navigating between /products/[id] pages (e.g. clicking a
+	// related product), so this needs to re-run on every product change.
+	$effect(() => {
+		const productId = data.product.id;
+		relatedLoading = true;
+
+		getRelatedProducts(productId)
+			.then((result) => {
+				related = result.data;
+			})
+			.catch(() => {
+				related = [];
+			})
+			.finally(() => {
+				relatedLoading = false;
+			});
+	});
 
 	function addToCart() {
 		cart.add(
@@ -141,4 +166,21 @@
 			{/if}
 		</div>
 	</div>
+
+	{#if relatedLoading || related.length > 0}
+		<div class="mt-12">
+			<h2 class="mb-4 text-lg font-semibold tracking-tight text-zinc-900">Produk Terkait</h2>
+			<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+				{#if relatedLoading}
+					{#each Array(4) as _, i (i)}
+						<div class="aspect-square animate-pulse rounded-lg bg-zinc-100"></div>
+					{/each}
+				{:else}
+					{#each related as product (product.id)}
+						<ProductCard {product} />
+					{/each}
+				{/if}
+			</div>
+		</div>
+	{/if}
 </div>

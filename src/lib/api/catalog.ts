@@ -21,6 +21,10 @@ export function getProduct(id: number | string, fetchFn?: typeof fetch) {
 	return apiFetch<{ data: Product }>(`/api/catalog/products/${id}`, { fetch: fetchFn });
 }
 
+export function getRelatedProducts(id: number | string, fetchFn?: typeof fetch) {
+	return apiFetch<{ data: Product[] }>(`/api/catalog/products/${id}/related`, { fetch: fetchFn });
+}
+
 export function listCategories(fetchFn?: typeof fetch) {
 	return apiFetch<{ data: string[] }>('/api/catalog/categories', { fetch: fetchFn });
 }
