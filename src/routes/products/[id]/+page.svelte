@@ -11,6 +11,8 @@
 
 	let quantity = $state(1);
 
+	let justAdded = $state(false);
+
 	function addToCart() {
 		cart.add(
 			{
@@ -22,6 +24,8 @@
 			quantity
 		);
 		toast.show(`${data.product.name} ditambahkan ke keranjang`);
+		justAdded = true;
+		setTimeout(() => (justAdded = false), 400);
 	}
 </script>
 
@@ -29,16 +33,16 @@
 	<title>{data.product.name} — Mr. Twin</title>
 </svelte:head>
 
-<div class="mx-auto max-w-5xl px-4 py-6">
+<div class="mx-auto max-w-6xl px-4 py-6">
 	<nav class="mb-4 flex items-center gap-1.5 text-sm text-zinc-500">
-		<a href={resolve('/')} class="hover:text-zinc-700">Katalog</a>
+		<a href={resolve('/')} class="hover:text-accent-700">Katalog</a>
 		{#if data.product.display_category}
 			<span>/</span>
 			<a
 				href={resolve(
 					`/?display_category=${encodeURIComponent(data.product.display_category)}` as PathnameWithSearchOrHash
 				)}
-				class="hover:text-zinc-700"
+				class="hover:text-accent-700"
 			>
 				{data.product.display_category}
 			</a>
@@ -46,7 +50,7 @@
 	</nav>
 
 	<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-		<div class="aspect-square overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
+		<div class="aspect-square overflow-hidden rounded-lg bg-zinc-100">
 			<ProductImage
 				src={data.product.images[0]}
 				alt={data.product.name}
@@ -60,10 +64,12 @@
 					<span>{data.product.brand}</span>
 					<span>·</span>
 				{/if}
-				<span>SKU {data.product.sku}</span>
+				<span class="font-mono">SKU {data.product.sku}</span>
 			</div>
-			<h1 class="mb-3 text-xl font-bold text-zinc-900">{data.product.name}</h1>
-			<p class="mb-4 text-3xl font-bold text-zinc-900">{formatPrice(data.product.price)}</p>
+			<h1 class="mb-3 text-xl font-semibold tracking-tight text-zinc-900">{data.product.name}</h1>
+			<p class="mb-4 font-mono text-3xl font-bold text-zinc-900 tabular-nums">
+				{formatPrice(data.product.price)}
+			</p>
 
 			<div class="mb-6">
 				{#if data.product.stock > 0}
@@ -84,16 +90,18 @@
 			</div>
 
 			{#if data.product.description}
-				<p class="mb-6 text-sm leading-relaxed text-zinc-600">{data.product.description}</p>
+				<p class="mb-6 max-w-[60ch] text-sm leading-relaxed text-zinc-600">
+					{data.product.description}
+				</p>
 			{/if}
 
 			{#if data.product.stock > 0}
 				<div class="flex items-center gap-3">
-					<div class="flex items-center rounded-md border border-zinc-200">
+					<div class="flex items-center rounded-lg border border-zinc-200">
 						<button
 							type="button"
 							onclick={() => (quantity = Math.max(1, quantity - 1))}
-							class="px-3 py-2 text-zinc-500 hover:bg-zinc-50"
+							class="px-3 py-2 text-zinc-500 transition hover:bg-zinc-50 active:scale-[0.98]"
 							aria-label="Kurangi jumlah"
 						>
 							−
@@ -108,7 +116,7 @@
 						<button
 							type="button"
 							onclick={() => (quantity = Math.min(data.product.stock, quantity + 1))}
-							class="px-3 py-2 text-zinc-500 hover:bg-zinc-50"
+							class="px-3 py-2 text-zinc-500 transition hover:bg-zinc-50 active:scale-[0.98]"
 							aria-label="Tambah jumlah"
 						>
 							+
@@ -116,7 +124,9 @@
 					</div>
 					<button
 						onclick={addToCart}
-						class="flex-1 rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+						class="flex-1 rounded-lg bg-accent-400 px-4 py-2.5 text-sm font-semibold text-zinc-900 transition hover:bg-accent-300 active:scale-[0.98] {justAdded
+							? 'motion-safe:animate-[pulse-once_0.4s_ease-out]'
+							: ''}"
 					>
 						Tambah ke Keranjang
 					</button>
@@ -124,7 +134,7 @@
 			{:else}
 				<button
 					disabled
-					class="w-full cursor-not-allowed rounded-md bg-zinc-100 px-4 py-2.5 text-sm font-medium text-zinc-400"
+					class="w-full cursor-not-allowed rounded-lg bg-zinc-100 px-4 py-2.5 text-sm font-medium text-zinc-400"
 				>
 					Stok Habis
 				</button>

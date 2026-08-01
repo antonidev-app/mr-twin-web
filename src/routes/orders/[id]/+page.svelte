@@ -33,25 +33,27 @@
 	<title>Detail Pesanan — Mr. Twin</title>
 </svelte:head>
 
-<div class="mx-auto max-w-2xl px-4 py-6">
+<div class="mx-auto max-w-3xl px-4 py-6">
 	<a
 		href={resolve('/orders')}
-		class="mb-4 inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700"
+		class="mb-4 inline-flex items-center gap-1 text-sm text-zinc-500 transition hover:text-accent-700"
 	>
 		&larr; Pesanan Saya
 	</a>
 
 	{#if loading}
-		<div class="h-56 animate-pulse rounded-xl border border-zinc-200 bg-zinc-50"></div>
+		<div class="h-56 animate-pulse rounded-lg bg-zinc-100"></div>
 	{:else if notFound || !order}
-		<div class="rounded-xl border border-dashed border-zinc-200 py-16 text-center text-zinc-500">
+		<div
+			class="rounded-lg border border-dashed border-zinc-300 bg-white py-16 text-center text-zinc-500"
+		>
 			Pesanan tidak ditemukan.
 		</div>
 	{:else}
-		<div class="rounded-xl border border-zinc-200 p-6">
+		<div class="rounded-lg bg-white p-6">
 			<div class="mb-4 flex items-start justify-between">
 				<div>
-					<h1 class="text-lg font-bold text-zinc-900">{order.order_number}</h1>
+					<h1 class="font-mono text-lg font-bold text-zinc-900">{order.order_number}</h1>
 					<p class="text-xs text-zinc-500">{new Date(order.created_at).toLocaleString('id-ID')}</p>
 				</div>
 				<span
@@ -68,14 +70,14 @@
 				{#each order.items as item (item.sku)}
 					<div class="flex justify-between py-1 text-sm text-zinc-600">
 						<span>{item.item_name} × {item.quantity}</span>
-						<span>{formatPrice(item.subtotal)}</span>
+						<span class="font-mono tabular-nums">{formatPrice(item.subtotal)}</span>
 					</div>
 				{/each}
 				<div
 					class="mt-2 flex justify-between border-t border-zinc-100 pt-2 text-sm font-semibold text-zinc-900"
 				>
 					<span>Total</span>
-					<span>{formatPrice(order.total_amount)}</span>
+					<span class="font-mono tabular-nums">{formatPrice(order.total_amount)}</span>
 				</div>
 			</div>
 

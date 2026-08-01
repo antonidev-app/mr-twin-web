@@ -7,7 +7,7 @@ export function formatPrice(value: number): string {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-	pending: 'bg-amber-50 text-amber-700',
+	pending: 'bg-accent-50 text-accent-800',
 	completed: 'bg-green-50 text-green-700',
 	cancelled: 'bg-red-50 text-red-600'
 };

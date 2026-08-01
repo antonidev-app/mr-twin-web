@@ -31,80 +31,28 @@
 
 <a
 	href="#main-content"
-	class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-zinc-900 focus:shadow-lg focus:ring-2 focus:ring-blue-500"
+	class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-zinc-900 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white focus:shadow-lg focus:ring-2 focus:ring-accent-400 focus:outline-none"
 >
 	Langsung ke konten utama
 </a>
 
 {#if navigating.to}
-	<div class="fixed inset-x-0 top-0 z-50 h-0.5 overflow-hidden bg-blue-100">
-		<div class="h-full w-1/3 animate-[loading-bar_1s_ease-in-out_infinite] bg-blue-600"></div>
+	<div class="fixed inset-x-0 top-0 z-50 h-0.5 overflow-hidden bg-accent-100">
+		<div class="h-full w-1/3 animate-[loading-bar_1s_ease-in-out_infinite] bg-accent-500"></div>
 	</div>
 {/if}
 
-<div class="flex min-h-screen flex-col">
-	<header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
-		<div class="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3">
-			<a href={resolve('/')} class="shrink-0 text-lg font-bold tracking-tight text-zinc-900">
-				Mr. Twin
-			</a>
-
-			<nav class="ml-auto flex shrink-0 items-center gap-1 text-sm">
-				<a
-					href={resolve('/cart')}
-					aria-label="Keranjang"
-					class="relative flex items-center gap-1.5 rounded-md px-3 py-2 font-medium text-zinc-700 hover:bg-zinc-100"
+<div class="flex min-h-screen flex-col bg-zinc-50">
+	<header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/90 backdrop-blur">
+		<div class="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3">
+			<a href={resolve('/')} class="flex shrink-0 items-center gap-2">
+				<span
+					class="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-xs font-bold tracking-tight text-white"
 				>
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.5"
-						class="h-5 w-5"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.802-4.638 2.032-7.006A1.9 1.9 0 0 0 19.5 5.25H5.106M7.5 14.25 5.106 5.25M17.25 20.25a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm-9 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
-						/>
-					</svg>
-					<span class="hidden md:inline">Keranjang</span>
-					{#if cart.itemCount > 0}
-						<span
-							class="absolute -top-1 -right-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-semibold text-white"
-						>
-							{cart.itemCount}
-						</span>
-					{/if}
-				</a>
-				{#if auth.isLoggedIn}
-					<a
-						href={resolve('/orders')}
-						class="rounded-md px-3 py-2 font-medium text-zinc-700 hover:bg-zinc-100"
-					>
-						Pesanan
-					</a>
-					<button
-						onclick={handleLogout}
-						class="rounded-md px-3 py-2 font-medium text-zinc-700 hover:bg-zinc-100"
-					>
-						Logout
-					</button>
-				{:else}
-					<a
-						href={resolve('/login')}
-						class="rounded-md px-3 py-2 font-medium text-zinc-700 hover:bg-zinc-100"
-					>
-						Login
-					</a>
-					<a
-						href={resolve('/register')}
-						class="rounded-md bg-zinc-900 px-3 py-2 font-medium text-white hover:bg-zinc-700"
-					>
-						Daftar
-					</a>
-				{/if}
-			</nav>
+					MT
+				</span>
+				<span class="text-lg font-semibold tracking-tight text-zinc-900">Mr. Twin</span>
+			</a>
 
 			<form onsubmit={handleSearch} class="order-last w-full sm:order-0 sm:w-auto sm:flex-1">
 				<label for="header-search" class="sr-only">Cari produk</label>
@@ -125,10 +73,67 @@
 						type="search"
 						placeholder="Cari produk..."
 						bind:value={searchQuery}
-						class="w-full rounded-full border border-zinc-200 bg-zinc-50 py-2 pr-4 pl-9 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						class="w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pr-4 pl-9 text-sm transition focus:border-accent-500 focus:bg-white focus:ring-2 focus:ring-accent-400/40 focus:outline-none"
 					/>
 				</div>
 			</form>
+
+			<nav class="flex shrink-0 items-center gap-1 text-sm">
+				<a
+					href={resolve('/cart')}
+					aria-label="Keranjang"
+					class="relative flex items-center gap-1.5 rounded-lg px-3 py-2 font-medium text-zinc-700 transition hover:bg-zinc-100 active:scale-[0.98]"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						class="h-5 w-5"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.802-4.638 2.032-7.006A1.9 1.9 0 0 0 19.5 5.25H5.106M7.5 14.25 5.106 5.25M17.25 20.25a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm-9 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+						/>
+					</svg>
+					<span class="hidden md:inline">Keranjang</span>
+					{#if cart.itemCount > 0}
+						<span
+							class="absolute -top-1 -right-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-accent-500 px-1 text-[10px] font-semibold text-zinc-900"
+						>
+							{cart.itemCount}
+						</span>
+					{/if}
+				</a>
+				{#if auth.isLoggedIn}
+					<a
+						href={resolve('/orders')}
+						class="rounded-lg px-3 py-2 font-medium text-zinc-700 transition hover:bg-zinc-100 active:scale-[0.98]"
+					>
+						Pesanan
+					</a>
+					<button
+						onclick={handleLogout}
+						class="rounded-lg px-3 py-2 font-medium text-zinc-700 transition hover:bg-zinc-100 active:scale-[0.98]"
+					>
+						Logout
+					</button>
+				{:else}
+					<a
+						href={resolve('/login')}
+						class="rounded-lg px-3 py-2 font-medium text-zinc-700 transition hover:bg-zinc-100 active:scale-[0.98]"
+					>
+						Login
+					</a>
+					<a
+						href={resolve('/register')}
+						class="rounded-lg bg-accent-400 px-3 py-2 font-semibold text-zinc-900 transition hover:bg-accent-300 active:scale-[0.98]"
+					>
+						Daftar
+					</a>
+				{/if}
+			</nav>
 		</div>
 	</header>
 
@@ -136,15 +141,15 @@
 		{@render children()}
 	</main>
 
-	<footer class="border-t border-zinc-200">
-		<div class="mx-auto max-w-6xl px-4 py-6 text-xs text-zinc-500">
+	<footer class="border-t border-zinc-200 bg-white">
+		<div class="mx-auto max-w-7xl px-4 py-6 text-xs text-zinc-500">
 			Mr. Twin — proyek portofolio, katalog disinkron dari data toko IT sungguhan (read-only). Lihat
 			kode di
 			<a
 				href="https://github.com/antonidev-app"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="underline hover:text-zinc-700"
+				class="font-medium text-accent-700 underline-offset-2 hover:underline"
 			>
 				GitHub
 			</a>.

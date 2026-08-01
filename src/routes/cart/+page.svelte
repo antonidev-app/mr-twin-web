@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { slide } from 'svelte/transition';
 	import ProductImage from '$lib/components/ProductImage.svelte';
 	import { formatPrice } from '$lib/format';
 	import { auth } from '$lib/stores/auth.svelte';
@@ -19,12 +20,12 @@
 	<title>Keranjang — Mr. Twin</title>
 </svelte:head>
 
-<div class="mx-auto max-w-4xl px-4 py-6">
-	<h1 class="mb-6 text-2xl font-bold tracking-tight text-zinc-900">Keranjang Belanja</h1>
+<div class="mx-auto max-w-5xl px-4 py-6">
+	<h1 class="mb-6 text-2xl font-semibold tracking-tight text-zinc-900">Keranjang Belanja</h1>
 
 	{#if cart.items.length === 0}
 		<div
-			class="flex flex-col items-center gap-3 rounded-xl border border-dashed border-zinc-200 py-16 text-center"
+			class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-zinc-300 bg-white py-16 text-center"
 		>
 			<svg
 				viewBox="0 0 24 24"
@@ -42,7 +43,7 @@
 			<p class="font-medium text-zinc-600">Keranjang kamu masih kosong</p>
 			<a
 				href={resolve('/')}
-				class="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700"
+				class="rounded-lg bg-accent-400 px-4 py-2 text-sm font-semibold text-zinc-900 transition hover:bg-accent-300 active:scale-[0.98]"
 			>
 				Lihat Katalog
 			</a>
@@ -52,10 +53,11 @@
 			<div class="flex-1 space-y-3">
 				{#each cart.items as item (item.productId)}
 					<div
-						class="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 p-3 sm:flex-nowrap sm:gap-4"
+						transition:slide|local={{ duration: 200 }}
+						class="flex flex-wrap items-center gap-3 rounded-lg bg-white p-3 sm:flex-nowrap sm:gap-4"
 					>
 						<div class="flex min-w-50 flex-1 items-center gap-3">
-							<div class="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-zinc-100">
+							<div class="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
 								<ProductImage src={item.image} alt={item.name} class="h-full w-full object-cover" />
 							</div>
 							<div class="min-w-0 flex-1">
@@ -65,16 +67,18 @@
 								>
 									{item.name}
 								</a>
-								<p class="text-sm text-zinc-500">{formatPrice(item.price)}</p>
+								<p class="font-mono text-sm text-zinc-500 tabular-nums">
+									{formatPrice(item.price)}
+								</p>
 							</div>
 						</div>
 
 						<div class="flex w-full items-center justify-between gap-3 sm:w-auto sm:justify-normal">
-							<div class="flex items-center rounded-md border border-zinc-200">
+							<div class="flex items-center rounded-lg border border-zinc-200">
 								<button
 									type="button"
 									onclick={() => cart.updateQuantity(item.productId, item.quantity - 1)}
-									class="px-2.5 py-1.5 text-zinc-500 hover:bg-zinc-50"
+									class="px-2.5 py-1.5 text-zinc-500 transition hover:bg-zinc-50 active:scale-[0.98]"
 									aria-label="Kurangi jumlah"
 								>
 									−
@@ -83,18 +87,20 @@
 								<button
 									type="button"
 									onclick={() => cart.updateQuantity(item.productId, item.quantity + 1)}
-									class="px-2.5 py-1.5 text-zinc-500 hover:bg-zinc-50"
+									class="px-2.5 py-1.5 text-zinc-500 transition hover:bg-zinc-50 active:scale-[0.98]"
 									aria-label="Tambah jumlah"
 								>
 									+
 								</button>
 							</div>
-							<p class="w-24 shrink-0 text-right text-sm font-semibold text-zinc-900">
+							<p
+								class="w-24 shrink-0 text-right font-mono text-sm font-semibold text-zinc-900 tabular-nums"
+							>
 								{formatPrice(item.price * item.quantity)}
 							</p>
 							<button
 								onclick={() => cart.remove(item.productId)}
-								class="shrink-0 rounded-md p-1.5 text-zinc-400 hover:bg-red-50 hover:text-red-500"
+								class="shrink-0 rounded-lg p-1.5 text-zinc-400 transition hover:bg-red-50 hover:text-red-500 active:scale-[0.98]"
 								aria-label="Hapus dari keranjang"
 							>
 								<svg
@@ -116,19 +122,19 @@
 				{/each}
 			</div>
 
-			<div class="h-fit rounded-xl border border-zinc-200 p-5 md:w-72">
+			<div class="h-fit rounded-lg bg-white p-5 md:w-72">
 				<h2 class="mb-4 text-sm font-semibold text-zinc-700">Ringkasan Belanja</h2>
 				<div class="flex justify-between border-b border-zinc-100 pb-3 text-sm text-zinc-500">
 					<span>Subtotal ({cart.itemCount} barang)</span>
-					<span>{formatPrice(cart.total)}</span>
+					<span class="font-mono tabular-nums">{formatPrice(cart.total)}</span>
 				</div>
 				<div class="flex justify-between py-3 text-base font-semibold text-zinc-900">
 					<span>Total</span>
-					<span>{formatPrice(cart.total)}</span>
+					<span class="font-mono tabular-nums">{formatPrice(cart.total)}</span>
 				</div>
 				<button
 					onclick={proceedToCheckout}
-					class="mt-2 w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+					class="mt-2 w-full rounded-lg bg-accent-400 px-4 py-2.5 text-sm font-semibold text-zinc-900 transition hover:bg-accent-300 active:scale-[0.98]"
 				>
 					Checkout
 				</button>
