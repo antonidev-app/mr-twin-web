@@ -29,6 +29,13 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
+<a
+	href="#main-content"
+	class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-zinc-900 focus:shadow-lg focus:ring-2 focus:ring-blue-500"
+>
+	Langsung ke konten utama
+</a>
+
 {#if navigating.to}
 	<div class="fixed inset-x-0 top-0 z-50 h-0.5 overflow-hidden bg-blue-100">
 		<div class="h-full w-1/3 animate-[loading-bar_1s_ease-in-out_infinite] bg-blue-600"></div>
@@ -37,36 +44,15 @@
 
 <div class="flex min-h-screen flex-col">
 	<header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur">
-		<div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+		<div class="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3">
 			<a href={resolve('/')} class="shrink-0 text-lg font-bold tracking-tight text-zinc-900">
 				Mr. Twin
 			</a>
 
-			<form onsubmit={handleSearch} class="hidden flex-1 sm:block">
-				<div class="relative">
-					<svg
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-					<input
-						type="search"
-						placeholder="Cari produk..."
-						bind:value={searchQuery}
-						class="w-full rounded-full border border-zinc-200 bg-zinc-50 py-2 pr-4 pl-9 text-sm focus:border-blue-500 focus:bg-white focus:outline-none"
-					/>
-				</div>
-			</form>
-
 			<nav class="ml-auto flex shrink-0 items-center gap-1 text-sm">
 				<a
 					href={resolve('/cart')}
+					aria-label="Keranjang"
 					class="relative flex items-center gap-1.5 rounded-md px-3 py-2 font-medium text-zinc-700 hover:bg-zinc-100"
 				>
 					<svg
@@ -119,22 +105,46 @@
 					</a>
 				{/if}
 			</nav>
+
+			<form onsubmit={handleSearch} class="order-last w-full sm:order-0 sm:w-auto sm:flex-1">
+				<label for="header-search" class="sr-only">Cari produk</label>
+				<div class="relative">
+					<svg
+						viewBox="0 0 20 20"
+						fill="currentColor"
+						class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+					<input
+						id="header-search"
+						type="search"
+						placeholder="Cari produk..."
+						bind:value={searchQuery}
+						class="w-full rounded-full border border-zinc-200 bg-zinc-50 py-2 pr-4 pl-9 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+				</div>
+			</form>
 		</div>
 	</header>
 
-	<main class="flex-1">
+	<main id="main-content" tabindex="-1" class="flex-1 focus:outline-none">
 		{@render children()}
 	</main>
 
 	<footer class="border-t border-zinc-200">
-		<div class="mx-auto max-w-6xl px-4 py-6 text-xs text-zinc-400">
+		<div class="mx-auto max-w-6xl px-4 py-6 text-xs text-zinc-500">
 			Mr. Twin — proyek portofolio, katalog disinkron dari data toko IT sungguhan (read-only). Lihat
 			kode di
 			<a
 				href="https://github.com/antonidev-app"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="underline hover:text-zinc-600"
+				class="underline hover:text-zinc-700"
 			>
 				GitHub
 			</a>.

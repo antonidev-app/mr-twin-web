@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import { listCategories, listProducts } from '$lib/api/catalog';
 import type { PageLoad } from './$types';
 
@@ -11,10 +12,14 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		page: url.searchParams.get('page') ?? undefined
 	};
 
-	const [products, categories] = await Promise.all([
-		listProducts(filters, fetch),
-		listCategories(fetch)
-	]);
+	try {
+		const [products, categories] = await Promise.all([
+			listProducts(filters, fetch),
+			listCategories(fetch)
+		]);
 
-	return { products, categories: categories.data, filters };
+		return { products, categories: categories.data, filters };
+	} catch {
+		error(503, 'Tidak bisa memuat katalog saat ini. Coba lagi sebentar.');
+	}
 };

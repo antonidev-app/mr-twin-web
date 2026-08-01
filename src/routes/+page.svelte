@@ -171,7 +171,7 @@
 					class="flex flex-col items-center gap-2 rounded-xl border border-dashed border-zinc-200 py-16 text-center"
 				>
 					<p class="font-medium text-zinc-600">Tidak ada produk ditemukan</p>
-					<p class="text-sm text-zinc-400">Coba ubah atau reset filter yang sedang aktif.</p>
+					<p class="text-sm text-zinc-500">Coba ubah atau reset filter yang sedang aktif.</p>
 				</div>
 			{:else}
 				<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">

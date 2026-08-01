@@ -52,7 +52,7 @@
 			<div class="mb-4 flex items-start justify-between">
 				<div>
 					<h1 class="text-lg font-bold text-zinc-900">{order.order_number}</h1>
-					<p class="text-xs text-zinc-400">{new Date(order.created_at).toLocaleString('id-ID')}</p>
+					<p class="text-xs text-zinc-500">{new Date(order.created_at).toLocaleString('id-ID')}</p>
 				</div>
 				<span
 					class="rounded-full px-3 py-1 text-xs font-medium capitalize {orderStatusClass(

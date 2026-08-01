@@ -84,7 +84,7 @@
 							type="text"
 							required
 							bind:value={shippingName}
-							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 						/>
 					</div>
 					<div>
@@ -96,7 +96,7 @@
 							type="text"
 							required
 							bind:value={shippingPhone}
-							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 						/>
 					</div>
 					<div>
@@ -108,7 +108,7 @@
 							required
 							rows="3"
 							bind:value={shippingAddress}
-							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+							class="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 						></textarea>
 					</div>
 				</div>
@@ -133,7 +133,7 @@
 						</div>
 						<div class="min-w-0 flex-1">
 							<p class="line-clamp-1 text-sm text-zinc-700">{item.name}</p>
-							<p class="text-xs text-zinc-400">{item.quantity} × {formatPrice(item.price)}</p>
+							<p class="text-xs text-zinc-500">{item.quantity} × {formatPrice(item.price)}</p>
 						</div>
 						<p class="shrink-0 text-sm font-medium text-zinc-900">
 							{formatPrice(item.price * item.quantity)}

@@ -66,6 +66,12 @@ One non-obvious piece of plumbing: `src/hooks.server.ts` explicitly allows the `
 
 This project's ESLint config enforces `svelte/no-navigation-without-resolve` — every `goto()` call and dynamic `href` must be wrapped in `resolve()` from `$app/paths` (SvelteKit's typed-routing helper), not a raw string. For redirect targets that are only known at runtime (the `?redirect=` query param on `/login`/`/register`), see `src/lib/safe-redirect.ts` — it validates the value is an internal relative path before treating it as trusted, since a raw `redirect` query param would otherwise be an open-redirect vector.
 
+## Error handling & accessibility
+
+`+page.ts` load functions that hit the backend (katalog, product detail) catch fetch failures and re-throw via SvelteKit's `error()` helper, so `src/routes/+error.svelte` renders a styled page instead of the framework default — both for a genuine 404 (e.g. an unpublished/nonexistent product) and for the backend being unreachable (503).
+
+A basic a11y pass is in place: a skip-to-content link targeting `<main id="main-content">`, visible focus rings on every form input (not just a border-color change), `aria-label`s on icon-only controls (cart link, quantity steppers, remove-from-cart), and `text-zinc-500`/`600` instead of `zinc-400` for any text that needs to stay readable at WCAG AA contrast (`zinc-400` on white is ~2.3:1, well under the 4.5:1 minimum).
+
 ## Building
 
 ```bash

@@ -55,7 +55,7 @@
 				>
 					<div>
 						<p class="text-sm font-medium text-zinc-900">{order.order_number}</p>
-						<p class="text-xs text-zinc-400">
+						<p class="text-xs text-zinc-500">
 							{new Date(order.created_at).toLocaleString('id-ID')}
 						</p>
 					</div>

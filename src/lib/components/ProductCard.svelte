@@ -26,7 +26,7 @@
 		{/if}
 	</div>
 	<div class="flex flex-1 flex-col gap-1 p-3">
-		<span class="text-xs text-zinc-400">{product.display_category ?? '—'}</span>
+		<span class="text-xs text-zinc-500">{product.display_category ?? '—'}</span>
 		<span class="line-clamp-2 flex-1 text-sm font-medium text-zinc-800">{product.name}</span>
 		<span class="text-base font-semibold text-zinc-900">{formatPrice(product.price)}</span>
 	</div>

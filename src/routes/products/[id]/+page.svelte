@@ -30,15 +30,15 @@
 </svelte:head>
 
 <div class="mx-auto max-w-5xl px-4 py-6">
-	<nav class="mb-4 flex items-center gap-1.5 text-sm text-zinc-400">
-		<a href={resolve('/')} class="hover:text-zinc-600">Katalog</a>
+	<nav class="mb-4 flex items-center gap-1.5 text-sm text-zinc-500">
+		<a href={resolve('/')} class="hover:text-zinc-700">Katalog</a>
 		{#if data.product.display_category}
 			<span>/</span>
 			<a
 				href={resolve(
 					`/?display_category=${encodeURIComponent(data.product.display_category)}` as PathnameWithSearchOrHash
 				)}
-				class="hover:text-zinc-600"
+				class="hover:text-zinc-700"
 			>
 				{data.product.display_category}
 			</a>
@@ -55,7 +55,7 @@
 		</div>
 
 		<div>
-			<div class="mb-2 flex items-center gap-2 text-xs text-zinc-400">
+			<div class="mb-2 flex items-center gap-2 text-xs text-zinc-500">
 				{#if data.product.brand}
 					<span>{data.product.brand}</span>
 					<span>·</span>
