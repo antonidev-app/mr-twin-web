@@ -33,7 +33,7 @@
 	<title>Detail Pesanan — Mr. Twin</title>
 </svelte:head>
 
-<div class="mx-auto max-w-3xl px-4 py-6">
+<div class="mx-auto max-w-7xl px-4 py-6">
 	<a
 		href={resolve('/orders')}
 		class="mb-4 inline-flex items-center gap-1 text-sm text-zinc-500 transition hover:text-accent-700"

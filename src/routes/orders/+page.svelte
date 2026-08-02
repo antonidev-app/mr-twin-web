@@ -25,7 +25,7 @@
 	<title>Pesanan Saya — Mr. Twin</title>
 </svelte:head>
 
-<div class="mx-auto max-w-3xl px-4 py-6">
+<div class="mx-auto max-w-7xl px-4 py-6">
 	<h1 class="mb-6 text-2xl font-semibold tracking-tight text-zinc-900">Pesanan Saya</h1>
 
 	{#if loading}
