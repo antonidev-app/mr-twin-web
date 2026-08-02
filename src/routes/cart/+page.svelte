@@ -20,7 +20,7 @@
 	<title>Keranjang — Mr. Twin</title>
 </svelte:head>
 
-<div class="mx-auto max-w-5xl px-4 py-6">
+<div class="mx-auto max-w-7xl px-4 py-6">
 	<h1 class="mb-6 text-2xl font-semibold tracking-tight text-zinc-900">Keranjang Belanja</h1>
 
 	{#if cart.items.length === 0}
